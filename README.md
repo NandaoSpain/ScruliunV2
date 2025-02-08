@@ -1,5 +1,9 @@
 # Task Management API
 
+![GitHub license](https://img.shields.io/github/license/seu-usuario/task-management-api)
+![GitHub repo size](https://img.shields.io/github/repo-size/seu-usuario/task-management-api)
+![GitHub last commit](https://img.shields.io/github/last-commit/seu-usuario/task-management-api)
+
 ## 📌 Descrição
 Esta é uma API de gerenciamento de tasks, permitindo criar, listar, atualizar e excluir tarefas. Ideal para organização pessoal ou equipes.
 
