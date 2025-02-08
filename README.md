@@ -1,4 +1,4 @@
-# Task Management API
+# Scruliun V2
 
 ![GitHub license](https://img.shields.io/github/license/seu-usuario/task-management-api)
 ![GitHub repo size](https://img.shields.io/github/repo-size/seu-usuario/task-management-api)
