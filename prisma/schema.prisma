@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  user
+}
+
+enum TaskStatus {
+  pending
+  inProgress
+  completed
+}
+
+enum TaskPriority {
+  low
+  medium
+  high
+}
+
+model User {
+  id String @default(uuid()) @unique
+  name String
+  email String @unique
+  password String 
+  role UserRole
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("user")
+
+  Task Task[]
+  TeamMembers TeamMembers[]
+  TaskHistory TaskHistory[]
+}
+
+model Team {
+  id String @default(uuid()) @unique
+  name String @unique  
+  description String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("team")
+
+  TeamMembers TeamMembers[]  
+  Task Task[]
+}
+
+model Task {
+  id String @default(uuid()) @unique
+  title String
+  description String
+  status TaskStatus
+  priority TaskPriority
+  assignedTo String @map("assigned_to")
+  teamId String @map("team_id")
+
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("task")
+
+  User User @relation(fields: [assignedTo], references: [id])
+  Team Team @relation(fields: [teamId], references: [id])
+
+  TaskHistory TaskHistory[]
+} 
+
+model TeamMembers {
+  id String @default(uuid()) @unique
+  userId String @map("user_id")
+  teamId String @map("team_id")
+
+  User User @relation(fields: [userId], references: [id])
+  Team Team @relation(fields: [teamId], references: [id])
+
+  @@map("team_members")
+}
+
+model TaskHistory {
+  id String @default(uuid()) @unique
+  taskId String @map("task_id")
+  changedBy String @map("changed_by")
+  oldStatus TaskStatus @map("old_status")
+  newStatus TaskStatus @map("new_status")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  User User @relation(fields: [changedBy], references: [id])
+  Task Task @relation(fields: [taskId], references: [id])
+
+  @@map("task_history")
+}
