@@ -41,6 +41,27 @@ class UsersController {
 
     response.status(201).json(userWithoutPassword);
   }
+
+  async removeUser(request: Request, response: Response) {
+    const bodySchema = z.object({
+      email: z.string().email()
+    })
+    const { email } = bodySchema.parse(request.body)
+    
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+    
+    if (!user) {
+      throw new AppError(`User with email ${email} not found`, 404);
+    }
+    
+    await prisma.user.delete({
+      where: { id: user.id },
+    });
+    
+    response.status(204).send();
+  }
 }
 
 export { UsersController }
