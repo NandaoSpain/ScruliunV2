@@ -25,7 +25,7 @@ enum TaskPriority {
 }
 
 model User {
-  id String @default(uuid()) @unique
+  id String @id @default(uuid())
   name String
   email String @unique
   password String 
@@ -42,7 +42,7 @@ model User {
 }
 
 model Team {
-  id String @default(uuid()) @unique
+  id String @id @default(uuid())
   name String @unique  
   description String
 
@@ -56,11 +56,11 @@ model Team {
 }
 
 model Task {
-  id String @default(uuid()) @unique
+  id String @id @default(uuid()) 
   title String
   description String
-  status TaskStatus
-  priority TaskPriority
+  status TaskStatus @default(pending)
+  priority TaskPriority @default(low)
   assignedTo String @map("assigned_to")
   teamId String @map("team_id")
 
@@ -77,7 +77,7 @@ model Task {
 } 
 
 model TeamMembers {
-  id String @default(uuid()) @unique
+  id String @id @default(uuid()) 
   userId String @map("user_id")
   teamId String @map("team_id")
 
@@ -85,12 +85,14 @@ model TeamMembers {
   Team Team @relation(fields: [teamId], references: [id])
 
   @@map("team_members")
+  @@unique([userId, teamId])
 }
 
 model TaskHistory {
-  id String @default(uuid()) @unique
+  id String @id @default(uuid()) 
   taskId String @map("task_id")
   changedBy String @map("changed_by")
+  event String
   oldStatus TaskStatus @map("old_status")
   newStatus TaskStatus @map("new_status")
   createdAt DateTime @default(now()) @map("created_at")
