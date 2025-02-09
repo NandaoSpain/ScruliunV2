@@ -1,8 +1,8 @@
 # Scruliun V2
 
-![GitHub license](https://img.shields.io/github/license/nandaospain/task-management-api)
-![GitHub repo size](https://img.shields.io/github/repo-size/nandaospain/task-management-api)
-![GitHub last commit](https://img.shields.io/github/last-commit/nandaospain/task-management-api)
+![GitHub license](https://img.shields.io/github/license/NandaoSpain/ScruliunV2)
+![GitHub repo size](https://img.shields.io/github/repo-size/NandaoSpain/ScruliunV2)
+![GitHub last commit](https://img.shields.io/github/last-commit/NandaoSpain/ScruliunV2)
 
 ## 📌 Descrição
 Esta é uma API de gerenciamento de tasks, permitindo criar, listar, atualizar e excluir tarefas. Ideal para organização pessoal ou equipes.
@@ -48,6 +48,7 @@ npm run dev
 | Método | Endpoint | Descrição |
 |---------|----------|-------------|
 | POST    | `/users` | Cria um novo usuário |
+| DELETE  | `/users` | Remove um usuário|
 | GET     | `/users/{id}` | Obtém dados de um usuário |
 | POST    | `/sessions` | Autenticação de usuário |
 | GET     | `/tasks` | Lista todas as tasks |
