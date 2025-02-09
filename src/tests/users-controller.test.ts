@@ -1,9 +1,7 @@
 import request from "supertest";
 import { app } from "@/app";
-import { prisma } from "@/database/prisma";
 
 describe("UsersController", () => {
-  let userId: string;
   let userEmail: string;
   let authToken: string;
 
@@ -14,9 +12,18 @@ describe("UsersController", () => {
       password: "password123",
       role: "admin",
     });
-    userId = userResponse.body.id;
     userEmail = userResponse.body.email;
     expect(userResponse.status).toBe(201);
+  });
+
+  it("should not create a new user with email existing", async () => {
+    const response = await request(app).post("/users").send({
+      name: "Bob",
+      email: "alice@example.com",
+      password: "password123",
+      role: "admin",
+    });
+    expect(response.status).toBe(400);
   });
 
   it("should create a session", async () => {
@@ -33,7 +40,6 @@ describe("UsersController", () => {
     const response = await request(app)
       .get("/users")
       .set("Authorization", `Bearer ${authToken}`);
-    console.log(response.body);
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBeGreaterThan(0);
@@ -46,5 +52,23 @@ describe("UsersController", () => {
       .send({ email: userEmail });
 
     expect(response.status).toBe(204);
+  });
+
+  it("should not remove a user without authorization", async () => {
+    const response = await request(app)
+      .delete("/users")
+      .send({ email: userEmail });
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("invalid JWT token");
+  });
+
+  it("should not remove a inexistent user", async () => {
+    const response = await request(app)
+      .delete("/users")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({ email: "nonexistent@example.com" });
+
+    expect(response.status).toBe(404);
   });
 });
