@@ -5,7 +5,7 @@ import { hash } from "bcrypt";
 import { AppError } from "@/utils/AppError";
 
 class UsersController {
-  async createUser(request: Request, response: Response) {
+  async create(request: Request, response: Response) {
     const userSchema = z.object({
       name: z.string().min(3).trim(),
       email: z.string().email(),
@@ -42,7 +42,7 @@ class UsersController {
     response.status(201).json(userWithoutPassword);
   }
 
-  async removeUser(request: Request, response: Response) {
+  async remove(request: Request, response: Response) {
     const bodySchema = z.object({
       email: z.string().email()
     })
