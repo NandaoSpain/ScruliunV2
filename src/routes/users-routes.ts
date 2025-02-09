@@ -7,9 +7,10 @@ const usersRoutes = Router();
 const usersController = new UsersController();
 
 usersRoutes.post("/", usersController.create);
+usersRoutes.use(ensureAuthenticated)
+usersRoutes.get("/", usersController.index);
 usersRoutes.delete(
   "/",
-  ensureAuthenticated,
   verifyUserAuthorization(["admin"]),
   usersController.remove
 );

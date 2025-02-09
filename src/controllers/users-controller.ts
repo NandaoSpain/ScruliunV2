@@ -62,6 +62,24 @@ class UsersController {
     
     response.status(204).send();
   }
+
+  async index(request: Request, response: Response): Promise<void> {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    if (!users.length) {
+      throw new AppError("No users found", 404);
+    }
+
+    response.json(users);
+  }
+
 }
 
 export { UsersController }
