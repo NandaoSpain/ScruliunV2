@@ -109,6 +109,15 @@ class TasksController {
     })
     response.json(task);
   } 
+  async remove(request: Request, response: Response) {
+    const { id } = request.params
+    const task = await prisma.task.findFirst({ where: { id: id} })
+    if (!task) {
+      throw new AppError("Task not found", 404);
+    }
+    await prisma.task.delete({ where: { id: id } })
+    response.status(201).json({ message: "Task deleted successfully"});
+  }
 }
 
 export { TasksController };
