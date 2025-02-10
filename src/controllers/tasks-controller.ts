@@ -1,5 +1,6 @@
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/AppError";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 import { Request, Response } from "express";
 import { z } from "zod";
 
@@ -37,6 +38,8 @@ class TasksController {
         description,
         assignedTo: user.id,
         teamId: teamData.id,
+        status: request.body.status ?? TaskStatus.pending,
+        priority: request.body.priority ?? TaskPriority.low, 
       },
     });
 

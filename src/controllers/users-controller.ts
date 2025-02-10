@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/database/prisma";
 import { hash } from "bcrypt";
 import { AppError } from "@/utils/AppError";
+import { UserRole } from "@prisma/client";
 
 class UsersController {
   async create(request: Request, response: Response) {
@@ -33,7 +34,7 @@ class UsersController {
         name,
         email,
         password: hashedPassword,
-        role: request.body.role,
+        role: role as UserRole,
       },
     });
 
