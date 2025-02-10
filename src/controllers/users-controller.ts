@@ -38,29 +38,29 @@ class UsersController {
       },
     });
 
-    const { password: _, ...userWithoutPassword } = user
+    const { password: _, ...userWithoutPassword } = user;
 
     response.status(201).json(userWithoutPassword);
   }
 
   async remove(request: Request, response: Response) {
     const bodySchema = z.object({
-      email: z.string().email()
-    })
-    const { email } = bodySchema.parse(request.body)
-    
+      email: z.string().email(),
+    });
+    const { email } = bodySchema.parse(request.body);
+
     const user = await prisma.user.findUnique({
       where: { email },
     });
-    
+
     if (!user) {
       throw new AppError(`User with email ${email} not found`, 404);
     }
-    
+
     await prisma.user.delete({
       where: { id: user.id },
     });
-    
+
     response.status(204).send();
   }
 
@@ -80,7 +80,18 @@ class UsersController {
 
     response.json(users);
   }
+  async show(request: Request, response: Response) {
+    const { id } = request.params;
 
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: { Task: true }
+    });
+    if (!user) {
+      throw new AppError(`User not found`, 404);
+    }
+    response.json(user);
+  }
 }
 
-export { UsersController }
+export { UsersController };

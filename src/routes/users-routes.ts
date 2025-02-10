@@ -9,6 +9,7 @@ const usersController = new UsersController();
 usersRoutes.post("/", usersController.create);
 usersRoutes.use(ensureAuthenticated)
 usersRoutes.get("/", usersController.index);
+usersRoutes.get("/:id", usersController.show)
 usersRoutes.delete(
   "/",
   verifyUserAuthorization(["admin"]),
