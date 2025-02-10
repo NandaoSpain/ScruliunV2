@@ -54,6 +54,20 @@ class TasksController {
     });
     response.json(tasks);
   }
+  async show(request: Request, response: Response){
+    const { id } = request.params;
+    const task = await prisma.task.findFirst({
+      where: { id },
+      include: {
+        User: { select: { id: true, name: true } },
+        Team: { select: { id: true, name: true } },
+      },
+    });
+    if (!task) {
+      throw new AppError("Task not found", 404);
+    }
+    response.json(task);
+  } 
 }
 
 export { TasksController };
