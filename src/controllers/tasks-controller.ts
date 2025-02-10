@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import { z } from "zod";
 
 class TasksController {
-  async create(request: Request, response: Response): Promise<any> {
+  async create(request: Request, response: Response) {
     const bodySchema = z.object({
       title: z.string().min(3).max(50),
       description: z.string().min(2).max(200),
@@ -54,7 +54,7 @@ class TasksController {
     });
     response.json(tasks);
   }
-  async show(request: Request, response: Response){
+  async show(request: Request, response: Response) {
     const { id } = request.params;
     const task = await prisma.task.findFirst({
       where: { id },

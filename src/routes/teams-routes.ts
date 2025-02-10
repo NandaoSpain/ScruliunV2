@@ -11,5 +11,6 @@ teamsRoutes.use(ensureAuthenticated)
 teamsRoutes.use(verifyUserAuthorization(["admin"]))
 
 teamsRoutes.post('/', teamsController.create)
+teamsRoutes.delete('/:id', teamsController.remove)
 
 export { teamsRoutes }
