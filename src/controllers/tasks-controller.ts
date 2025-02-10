@@ -67,6 +67,47 @@ class TasksController {
       throw new AppError("Task not found", 404);
     }
     response.json(task);
+  }
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
+    const bodySchema = z.object({
+      assignedTo: z.string(),
+      team: z.string(),
+      status: z.nativeEnum(TaskStatus).default(TaskStatus.pending), 
+      priority: z.nativeEnum(TaskPriority).default(TaskPriority.low)
+    });
+    const { assignedTo, team, status, priority } = bodySchema.parse(
+      request.body
+    );
+
+    const user = await prisma.user.findFirst({
+      where: { name: { equals: assignedTo, mode: "insensitive" } },
+    });
+
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+    const teamData = await prisma.team.findFirst({
+      where: { name: { equals: team, mode: "insensitive" } },
+    });
+
+    if (!teamData) {
+      throw new AppError("Team not found", 404);
+    }
+    const task = await prisma.task.update({
+      where: { id },
+      data: {
+        assignedTo: user.id,
+        teamId: teamData.id,
+        status,
+        priority,
+      },
+      include: {
+        User: { select: { id: true, name: true } },
+        Team: { select: { id: true, name: true } },
+      },
+    })
+    response.json(task);
   } 
 }
 
