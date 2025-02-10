@@ -29,6 +29,11 @@ class TeamsController {
   async remove(request: Request, response: Response) {
     const { id } = request.params
     const team = await prisma.team.findUnique({ where: { id: id } });
+    const task = await prisma.task.findFirst({ where: { teamId: id } });
+
+    if(task?.teamId === team?.id){
+      throw new AppError("Can't delete team with tasks assigned", 400);
+    }
 
     if (!team) {
       throw new AppError("Team not found", 404);
