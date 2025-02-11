@@ -38,6 +38,15 @@ class TeamMembersController {
     });
     response.status(201).json(relationship);
   }
+  async remove(request: Request, response: Response) {
+    const { id } = request.params
+    const relationship = await prisma.teamMembers.findUnique({ where: { id } });
+    if (!relationship) {
+      throw new AppError("Relationship not found", 404);
+    }
+    await prisma.teamMembers.delete({ where: { id } });
+    response.status(204).send();
+  }
 }
 
 export { TeamMembersController };

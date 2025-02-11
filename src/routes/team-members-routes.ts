@@ -10,5 +10,6 @@ const teamMembersRoutes = Router()
 teamMembersRoutes.use(ensureAuthenticated)
 teamMembersRoutes.use(verifyUserAuthorization(["admin"]))
 teamMembersRoutes.post("/", teamMembersController.relationships)
+teamMembersRoutes.delete("/:id", teamMembersController.remove)
 
 export { teamMembersRoutes }
