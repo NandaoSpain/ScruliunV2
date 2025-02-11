@@ -10,6 +10,8 @@ usersRoutes.post("/", usersController.create);
 usersRoutes.use(ensureAuthenticated)
 usersRoutes.get("/", usersController.index);
 usersRoutes.get("/:id", usersController.show)
+usersRoutes.put("/:id", usersController.update)
+
 usersRoutes.delete(
   "/",
   verifyUserAuthorization(["admin"]),

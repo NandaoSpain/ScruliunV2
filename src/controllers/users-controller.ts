@@ -92,6 +92,40 @@ class UsersController {
     }
     response.json(user);
   }
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
+    const authenticatedUserId = request.user.id
+    const userSchema = z.object({
+      name: z.string().min(3).trim(),
+      email: z.string().email(),
+    });
+    const { name, email } = userSchema.parse(request.body);
+
+    console.log(id, authenticatedUserId)
+
+    if(id !== authenticatedUserId) {
+      throw new AppError(`Unauthorized`, 401);
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+    });
+    
+    if (!user) {
+      throw new AppError(`User not found`, 404);
+    }
+
+    await prisma.user.update({
+      where: { id },
+      data: {
+        name,
+        email
+      }
+    })
+    response.json(user);
+  }
+
+
 }
 
 export { UsersController };
