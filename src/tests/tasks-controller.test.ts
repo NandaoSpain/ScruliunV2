@@ -5,6 +5,7 @@ describe("TasksController", () => {
   let teamId: string;
   let authToken: string;
   let taskId: string;
+  let relationshipId: string
   beforeAll(async () => {
     const userResponse = await request(app).post("/users").send({
       name: "johw",
@@ -29,11 +30,6 @@ describe("TasksController", () => {
     teamId = teamResponse.body.id;
   });
   afterAll(async () => {
-    /*const taskRemove = await request(app)
-      .delete(`/tasks/${taskId}`)
-      .set("Authorization", `Bearer ${authToken}`);
-    expect(taskRemove.status).toBe(201);*/
-
     const teamRemove = await request(app)
       .delete(`/teams/${teamId}`)
       .set("Authorization", `Bearer ${authToken}`);
@@ -147,4 +143,25 @@ describe("TasksController", () => {
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("Task not found");
   });
+  
+  // team-members tests
+
+  it("should be able to create a new relationship", async () => {
+    const response = await request(app)
+     .post("/team-members")
+     .set("Authorization", `Bearer ${authToken}`)
+     .send({
+        teamName: "testTeam",
+        userName: "johw",
+      });
+    relationshipId = await response.body.id
+    expect(response.status).toBe(201);
+  })
+
+  it("should be able to delete a relationship", async () => {
+    const response = await request(app)
+     .delete(`/team-members/${relationshipId}`)
+     .set("Authorization", `Bearer ${authToken}`)    
+    expect(response.status).toBe(204);
+  })
 });
