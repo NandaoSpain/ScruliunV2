@@ -13,6 +13,7 @@ teamsRoutes.use(verifyUserAuthorization(["admin"]))
 teamsRoutes.get('/', teamsController.index)
 teamsRoutes.post('/', teamsController.create)
 teamsRoutes.put('/:id', teamsController.update)
+teamsRoutes.get('/:id', teamsController.show)
 teamsRoutes.delete('/:id', teamsController.remove)
 
 export { teamsRoutes }

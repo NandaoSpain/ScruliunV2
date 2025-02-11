@@ -25,7 +25,6 @@ class TeamsController {
 
     response.status(201).json(newTeam);
   }
-
   async remove(request: Request, response: Response) {
     const { id } = request.params;
     const team = await prisma.team.findUnique({ where: { id: id } });
@@ -43,7 +42,6 @@ class TeamsController {
 
     response.status(204).send();
   }
-
   async update(request: Request, response: Response) {
     const { id } = request.params;
     const bodySchema = z.object({
@@ -65,5 +63,19 @@ class TeamsController {
     const teams = await prisma.team.findMany();
     response.json(teams);
   }
+  async show(request: Request, response: Response) {
+    const { id } = request.params;
+    const team = await prisma.team.findUnique({
+      where: { id: id },
+      include: { 
+        Task: { select: { title: true } }
+      },
+    });
+    if (!team) {
+      throw new AppError("Team not found", 404);
+    }
+    response.json(team);
+  }
+
 }
 export { TeamsController };
