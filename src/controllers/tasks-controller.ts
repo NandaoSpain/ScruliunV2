@@ -32,7 +32,17 @@ class TasksController {
       throw new AppError("Team not found", 404);
     }
 
-    const task = await prisma.task.create({
+    const taskStatus = task.status
+
+    const taskHistory = await prisma.taskHistory.create({
+      data: {
+        taskId: task.id,
+        action: "created",
+        userId: user.id,
+      },
+    })
+
+    const newTask = await prisma.task.create({
       data: {
         title,
         description,
@@ -43,7 +53,7 @@ class TasksController {
       },
     });
 
-    response.json(task);
+    response.json(newTask);
   }
   async index(request: Request, response: Response) {
     const tasks = await prisma.task.findMany({
