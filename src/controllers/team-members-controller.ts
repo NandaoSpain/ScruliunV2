@@ -26,7 +26,7 @@ class TeamMembersController {
     }
 
     const existingRelationship = await prisma.teamMembers.findUnique({
-      where: { userId_teamId: { userId: user.id, teamId: team.id } }
+      where: { userId_teamId: { userId: user.id, teamId: team.id } },
     });
 
     if (existingRelationship) {
@@ -39,13 +39,22 @@ class TeamMembersController {
     response.status(201).json(relationship);
   }
   async remove(request: Request, response: Response) {
-    const { id } = request.params
+    const { id } = request.params;
     const relationship = await prisma.teamMembers.findUnique({ where: { id } });
     if (!relationship) {
       throw new AppError("Relationship not found", 404);
     }
     await prisma.teamMembers.delete({ where: { id } });
     response.status(204).send();
+  }
+  async index(request: Request, response: Response) {
+    const teamMembers = await prisma.teamMembers.findMany({
+      include: {
+        User: { select: { name: true } },
+        Team: { select: { name: true } }
+      },
+    });
+    response.json(teamMembers);
   }
 }
 
