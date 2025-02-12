@@ -56,6 +56,20 @@ class TeamMembersController {
     });
     response.json(teamMembers);
   }
+  async show(request: Request, response: Response) {
+    const { id } = request.params;
+    const teamMember = await prisma.teamMembers.findUnique({
+      where: { id },
+      include: {
+        User: { select: { name: true } },
+        Team: { select: { name: true } }
+      },
+    });
+    if (!teamMember) {
+      throw new AppError("Team member not found", 404);
+    }
+    response.json(teamMember);
+  }
 }
 
 export { TeamMembersController };

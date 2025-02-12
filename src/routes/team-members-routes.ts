@@ -12,5 +12,6 @@ teamMembersRoutes.use(verifyUserAuthorization(["admin"]))
 teamMembersRoutes.post("/", teamMembersController.relationships)
 teamMembersRoutes.delete("/:id", teamMembersController.remove)
 teamMembersRoutes.get("/", teamMembersController.index)
+teamMembersRoutes.get("/:id", teamMembersController.show)
 
 export { teamMembersRoutes }
