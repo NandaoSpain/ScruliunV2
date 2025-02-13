@@ -140,7 +140,7 @@ class TasksController {
         },
       })
     ])
-    
+
     response.json(updatedTask);
   }
 
@@ -150,6 +150,11 @@ class TasksController {
     if (!task) {
       throw new AppError("Task not found", 404);
     }
+
+    const taskHistory = await prisma.taskHistory.deleteMany({
+      where: { taskId: task.id },
+    })
+
     await prisma.task.delete({ where: { id: id } })
     response.status(201).json({ message: "Task deleted successfully"});
   }
