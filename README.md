@@ -44,27 +44,33 @@ docker-compose up --build
 npm run dev
 ```
 
-## 🔗 Rotas da API (Em Construção)
+## 🔗 Rotas da API 
 | Método | Endpoint | Descrição |
 |---------|----------|-------------|
+| USERS   |
 | POST    | `/users` | Cria um novo usuário |
-| DELETE  | `/users` | Remove um usuário|
+| GET     | `/users/` | Lista todos os usuários |
 | GET     | `/users/{id}` | Obtém dados de um usuário |
+| PUT     | `/users/{id}` | Atualiza os dados de um usuário |
+| DELETE  | `/users` | Remove um usuário|
+| SESSIONS|
 | POST    | `/sessions` | Autenticação de usuário |
+| TASKS   |
 | GET     | `/tasks` | Lista todas as tasks |
 | POST    | `/tasks` | Cria uma nova task |
 | GET     | `/tasks/{id}` | Busca uma task pelo ID |
 | PUT     | `/tasks/{id}` | Atualiza uma task |
 | DELETE  | `/tasks/{id}` | Remove uma task |
+| TEAMS   |
 | GET     | `/teams` | Lista todas as equipes |
 | POST    | `/teams` | Cria uma nova equipe |
-| GET     | `/teams/{id}` | Obtém detalhes de uma equipe |
+| GET	    |`/teams/{id}`| Obtém detalhes de uma equipe
+| PUT	    |`/teams/{id}`|	Atualiza os dados de uma equipe
+|DELETE	  |`/teams/{id}`|	Remove uma equipe
+| TEAM MEMBERS| 
+| GET     | `/team-members` | Lista todas os membros de uma equipe  |
 | POST    | `/team-members` | Adiciona um usuário a uma equipe |
-| GET     | `/team-members` | Lista membros de uma equipe |
-| GET     | `/task-status` | Lista todos os status de tarefas |
-| POST    | `/task-status` | Cria um novo status de tarefa |
-| GET     | `/task-priority` | Lista todas as prioridades de tarefas |
-| POST    | `/task-priority` | Cria uma nova prioridade de tarefa |
+| DELETE  | `/team-members/{id}` | Remove um membro de uma equipe |
 
 ## 📌 Contribuição
 Contribuições são bem-vindas! Siga os passos:
