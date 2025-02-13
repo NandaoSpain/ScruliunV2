@@ -32,16 +32,6 @@ class TasksController {
       throw new AppError("Team not found", 404);
     }
 
-    const taskStatus = task.status
-
-    const taskHistory = await prisma.taskHistory.create({
-      data: {
-        taskId: task.id,
-        action: "created",
-        userId: user.id,
-      },
-    })
-
     const newTask = await prisma.task.create({
       data: {
         title,
@@ -51,10 +41,22 @@ class TasksController {
         status: request.body.status ?? TaskStatus.pending,
         priority: request.body.priority ?? TaskPriority.low,
       },
-    });
+    });    
+
+    const taskStatus = newTask.status
+
+    const taskHistory = await prisma.taskHistory.create({
+      data: {
+        taskId: newTask.id,
+        changedBy: user.id,
+        oldStatus: TaskStatus.pending,
+        newStatus: TaskStatus.pending,
+      },
+    })
 
     response.json(newTask);
   }
+
   async index(request: Request, response: Response) {
     const tasks = await prisma.task.findMany({
       include: {
@@ -104,21 +106,44 @@ class TasksController {
     if (!teamData) {
       throw new AppError("Team not found", 404);
     }
-    const task = await prisma.task.update({
+
+    const task = await prisma.task.findUnique({
       where: { id },
-      data: {
-        assignedTo: user.id,
-        teamId: teamData.id,
-        status,
-        priority,
-      },
-      include: {
-        User: { select: { id: true, name: true } },
-        Team: { select: { id: true, name: true } },
-      },
     })
-    response.json(task);
-  } 
+
+    if (!task) {
+      throw new AppError("Task not found", 404);
+    }
+
+    const oldTaskStatus = task?.status
+
+    const [taskHistory, updatedTask] = await prisma.$transaction([
+      prisma.taskHistory.create({
+        data: {
+          taskId: task.id,
+          changedBy: user.id,
+          oldStatus: oldTaskStatus ?? TaskStatus.pending,
+          newStatus: status,
+        },
+      }),
+      prisma.task.update({
+        where: { id },
+        data: {
+          assignedTo: user.id,
+          teamId: teamData.id,
+          status,
+          priority,
+        },
+        include: {
+          User: { select: { id: true, name: true } },
+          Team: { select: { id: true, name: true } },
+        },
+      })
+    ])
+    
+    response.json(updatedTask);
+  }
+
   async remove(request: Request, response: Response) {
     const { id } = request.params
     const task = await prisma.task.findFirst({ where: { id: id} })
