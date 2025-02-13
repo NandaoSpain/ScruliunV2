@@ -1,8 +1,8 @@
 # Scruliun V2
 
-![GitHub license](https://img.shields.io/github/license/NandaoSpain/ScruliunV2)
-![GitHub repo size](https://img.shields.io/github/repo-size/NandaoSpain/ScruliunV2)
-![GitHub last commit](https://img.shields.io/github/last-commit/NandaoSpain/ScruliunV2)
+![GitHub](https://img.shields.io/github/license/NandaoSpain/Scruliun)
+![GitHub last commit](https://img.shields.io/github/last-commit/NandaoSpain/Scruliun)
+![GitHub repo size](https://img.shields.io/github/repo-size/NandaoSpain/Scruliun)
 
 ## 📌 Descrição
 Esta é uma API de gerenciamento de tasks, permitindo criar, listar, atualizar e excluir tarefas. Ideal para organização pessoal ou equipes.
