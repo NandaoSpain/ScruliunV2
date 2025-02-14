@@ -82,4 +82,4 @@ Contribuições são bem-vindas! Siga os passos:
 
 ---
 **📄 Licença**: MIT License
-
+---
